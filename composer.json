@@ -1,0 +1,15 @@
+{
+  "name": "Slacki/MVC",
+  "description": "MVC pattern implementation",
+  "authors": [
+    {
+      "name": "Kacper Czochara",
+      "email": "kacperczochara@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Framework\\": "./Framework/"
+    }
+  }
+}

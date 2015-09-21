@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Framework\HttpException;
+use Framework\Exception\HttpException;
 use Framework\HttpRequest;
 use Framework\Router;
 
@@ -43,7 +43,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             $router = new Router(['rules' => $this->rules]);
             $result = $router->resolve($request);
         } catch (HttpException $e) {
-            $this->assertInstanceOf('\\Framework\HttpException', $e);
+            $this->assertInstanceOf('\\Framework\\Exception\\HttpException', $e);
         }
 
     }

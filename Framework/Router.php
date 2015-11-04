@@ -69,7 +69,7 @@ class Router
             throw new HttpException('Not found', 404);
         }
 
-        // assign an parameter name to it's value coming from the request
+        // assign a parameter name to it's value coming from the request
         $attributesValues = explode('/', $query);
 
         $i = 0;

@@ -18,6 +18,6 @@ class Application
 
         $request = new HttpRequest();
         $router = new Router($this->config->router);
-        $router->resolve($request);
+        $request = $router->resolve($request);
     }
 }

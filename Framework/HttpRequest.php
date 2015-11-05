@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use Framework\Config;
+
 /**
  * Class HttpRequest
  * Represents the request to web server.
@@ -43,6 +45,6 @@ class HttpRequest
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->query = $_GET['q'];
+        $this->query = isset($_GET['q']) ? $_GET['q'] : App::$app->config->defaultAction;
     }
 }

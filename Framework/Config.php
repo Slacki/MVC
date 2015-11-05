@@ -15,14 +15,14 @@ class Config
 
     public function __get($property)
     {
-        if (array_key_exists($property, $this->config)) {
-            return $this->config[$property];
+        if (array_key_exists($property, $this->_config)) {
+            return $this->_config[$property];
         }
         throw new InvalidConfigException('Cannot find property: ' . $property);
     }
 
     public function __set($property, $value)
     {
-        $this->config[$property] = $value;
+        $this->_config[$property] = $value;
     }
 }

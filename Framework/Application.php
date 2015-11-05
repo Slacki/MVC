@@ -19,5 +19,6 @@ class Application
         $request = new HttpRequest();
         $router = new Router($this->config->router);
         $request = $router->resolve($request);
+        $dispatcher = new Dispatcher($request);
     }
 }

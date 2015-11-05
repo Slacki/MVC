@@ -10,7 +10,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->rules = require(__DIR__ . '/rules.php');
+        $this->rules = require(__DIR__ . '/routerRules.php');
     }
 
     public function testRegexCompile()

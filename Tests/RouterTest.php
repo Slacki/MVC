@@ -12,8 +12,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->rules = require_once(__DIR__ . '/rules.php');
-        parent::setUp();
+        $this->rules = require(__DIR__ . '/routerRules.php');
     }
 
     public function testResolve()

@@ -9,7 +9,9 @@
   ],
   "autoload": {
     "psr-4": {
-      "Framework\\": "./Framework/"
+      "Framework\\": "./Framework/",
+      "Tests\\": "./Tests/",
+      "App\\": "./Tests/App/"
     }
   }
 }

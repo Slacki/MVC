@@ -6,16 +6,11 @@ use Framework\App;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
-    public $config;
+    private $config;
 
     public function setUp()
     {
-        $this->config = [
-            'defaultAction' => 'site/index',
-            'router' => [
-                'rules' => require('routerRules.php'),
-            ],
-        ];
+        $this->config = require('applicationConfig.php');
     }
 
     public function testApplicationCreation()

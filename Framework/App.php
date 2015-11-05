@@ -2,4 +2,6 @@
 
 namespace Framework;
 
-class App extends Application {}
+class App extends Application
+{
+}

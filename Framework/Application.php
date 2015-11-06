@@ -16,7 +16,12 @@ class Application
     {
         self::$app = $this;
         $this->config = new Config($config);
-        $this->baseUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $this->baseUrl = $_SERVER['HTTP_HOST'];
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $this->baseUrl = 'https://' . $this->baseUrl;
+        } else {
+            $this->baseUrl = 'http://' . $this->baseUrl;
+        }
     }
 
     public function init()

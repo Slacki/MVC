@@ -8,12 +8,15 @@ class Application
 {
     public static $app;
     public $config;
+    public $baseUrl;
+
     private $_db = null;
 
     public function __construct(array $config)
     {
         self::$app = $this;
         $this->config = new Config($config);
+        $this->baseUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
     public function init()

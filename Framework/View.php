@@ -9,14 +9,14 @@ class View
 
     public function __construct()
     {
-        $this->viewsDirectory = App::$app->config->applicationDirectory . '/views/';
+        $this->_viewsDirectory = App::$app->config->applicationDirectory . '/views/';
     }
 
     public function render($view, $useLayout = true)
     {
         $viewPath = $this->_viewsDirectory . $view . '.php';
         if (!file_exists($viewPath)) {
-            throw new \Exception('View ' . $view . 'does not exist.');
+            throw new \Exception('View ' . $view . ' does not exist.');
         }
 
         ob_start();

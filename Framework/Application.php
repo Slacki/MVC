@@ -8,6 +8,7 @@ class Application
 {
     public static $app;
     public $config;
+    public $request;
     public $baseUrl;
 
     private $_db = null;
@@ -16,7 +17,7 @@ class Application
     {
         self::$app = $this;
         $this->config = new Config($config);
-        $this->baseUrl = $_SERVER['HTTP_HOST'];
+        isset($_SERVER['HTTP_HOST']) ? $this->baseUrl = $_SERVER['HTTP_HOST'] : $this->baseUrl = null;
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
             $this->baseUrl = 'https://' . $this->baseUrl;
         } else {
@@ -30,6 +31,7 @@ class Application
         $router = new Router($this->config->router);
         $request = $router->resolve($request);
         $dispatcher = new Dispatcher($request);
+        $this->request = $request;
     }
 
     public function getDb()

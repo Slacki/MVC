@@ -2,7 +2,12 @@
 
 namespace TestApp\controllers;
 
-class SiteController
-{
+use Framework\Controller;
 
+class SiteController extends Controller
+{
+    public function actionIndex()
+    {
+
+    }
 }

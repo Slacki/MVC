@@ -11,7 +11,7 @@ use Framework\Exception\HttpException;
  */
 class Dispatcher
 {
-    public $defaultAppNamespace = '\\App';
+    public $appNamespace = '\\App';
 
     /**
      * @var HttpRequest Stores local instance of request to exctract data
@@ -23,13 +23,17 @@ class Dispatcher
      */
     public function __construct(HttpRequest $request)
     {
+        if (isset(App::$app->config->dispatcher['appNamespace'])) {
+            $this->appNamespace = App::$app->config->dispatcher['appNamespace'];
+        }
+
         $this->_request = $request;
         $this->_executeAction($this->_createController());
     }
 
     private function _createController()
     {
-        $controllerWithNamespace = $this->defaultAppNamespace . '\\controllers\\' . ucfirst($this->_request->controller) . 'Controller';
+        $controllerWithNamespace = $this->appNamespace . '\\controllers\\' . ucfirst($this->_request->controller) . 'Controller';
         return new $controllerWithNamespace();
     }
 

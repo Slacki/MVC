@@ -11,5 +11,8 @@ return [
     ],
     'router' => [
         'rules' => require('routerRules.php'),
+    ],
+    'dispatcher' => [
+        'appNamespace' => '\\TestApp',
     ]
 ];

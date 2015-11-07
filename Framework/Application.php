@@ -8,9 +8,9 @@ class Application
 {
     public static $app;
     public $config;
-    public $request;
     public $baseUrl;
 
+    private $_request;
     private $_db = null;
 
     public function __construct(array $config)
@@ -30,8 +30,8 @@ class Application
         $request = new HttpRequest();
         $router = new Router($this->config->router);
         $request = $router->resolve($request);
+        $this->_request = $request;
         $dispatcher = new Dispatcher($request);
-        $this->request = $request;
     }
 
     public function getDb()
@@ -46,5 +46,10 @@ class Application
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         return $this->_db;
+    }
+
+    public function getRequest()
+    {
+        return $this->_request;
     }
 }

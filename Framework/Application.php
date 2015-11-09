@@ -6,13 +6,39 @@ use \PDO;
 
 class Application
 {
+    /**
+     * Application instance
+     * @var Application
+     */
     public static $app;
+
+    /**
+     * \Framework\Config object
+     * @var Config
+     */
     public $config;
+
+    /**
+     * @var string Base url of an application e.g. http://example.com
+     */
     public $baseUrl;
 
+    /**
+     * @var \Framework\HttpRequest object
+     */
     private $_request;
+
+    /**
+     * @var null|\PDO Database access object
+     */
     private $_db = null;
 
+    /**
+     * Application constructor.
+     * Doing all the stuff before an application can be initialized.
+     *
+     * @param array $config
+     */
     public function __construct(array $config)
     {
         // register error handler as early as possible
@@ -21,16 +47,23 @@ class Application
 
         self::$app = $this;
         $this->config = new Config($config);
+    }
+
+    /**
+     * Initializes an applicaton.
+     *
+     * @throws Exception\HttpException
+     * @throws Exception\InvalidConfigException
+     */
+    public function init()
+    {
         isset($_SERVER['HTTP_HOST']) ? $this->baseUrl = $_SERVER['HTTP_HOST'] : $this->baseUrl = null;
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
             $this->baseUrl = 'https://' . $this->baseUrl;
         } else {
             $this->baseUrl = 'http://' . $this->baseUrl;
         }
-    }
 
-    public function init()
-    {
         $request = new HttpRequest();
         $router = new Router($this->config->router);
         $request = $router->resolve($request);
@@ -38,6 +71,11 @@ class Application
         $dispatcher = new Dispatcher($request);
     }
 
+    /**
+     * Opens connection with Database and returns Database access object
+     *
+     * @return null|PDO
+     */
     public function getDb()
     {
         if ($this->_db === null) {
@@ -52,6 +90,9 @@ class Application
         return $this->_db;
     }
 
+    /**
+     * @return HttpRequest Application request object
+     */
     public function getRequest()
     {
         return $this->_request;

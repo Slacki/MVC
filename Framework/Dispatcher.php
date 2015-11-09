@@ -28,15 +28,35 @@ class Dispatcher
         }
 
         $this->_request = $request;
+    }
+
+    /**
+     * Runs Dispatcher
+     *
+     * @throws HttpException
+     */
+    public function dispatch()
+    {
         $this->_executeAction($this->_createController());
     }
 
+    /**
+     * Creates instance of Controller from Request
+     *
+     * @return \Framework\Controller
+     */
     private function _createController()
     {
         $controllerWithNamespace = $this->appNamespace . '\\controllers\\' . ucfirst($this->_request->controller) . 'Controller';
         return new $controllerWithNamespace();
     }
 
+    /**
+     * Executes controller's actoin based on request. Calls before and after action methods, too.
+     *
+     * @param $controller
+     * @throws HttpException
+     */
     private function _executeAction($controller)
     {
         /* @var $controller Controller */

@@ -2,8 +2,6 @@
 
 namespace Framework;
 
-use Framework\Config;
-
 /**
  * Class HttpRequest
  * Represents the request to web server.
@@ -42,6 +40,9 @@ class HttpRequest
      */
     public $parameters = [];
 
+    /**
+     * HttpRequest constructor.
+     */
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];

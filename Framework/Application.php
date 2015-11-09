@@ -15,6 +15,10 @@ class Application
 
     public function __construct(array $config)
     {
+        // register error handler as early as possible
+        $errorHandler = new ErrorHandler();
+        $errorHandler->register();
+
         self::$app = $this;
         $this->config = new Config($config);
         isset($_SERVER['HTTP_HOST']) ? $this->baseUrl = $_SERVER['HTTP_HOST'] : $this->baseUrl = null;

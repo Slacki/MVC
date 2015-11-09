@@ -4,17 +4,17 @@ namespace Framework;
 
 class View
 {
-    private $_viewsDirectory;
+    public $viewsDirectory;
     private $_data = [];
 
     public function __construct()
     {
-        $this->_viewsDirectory = App::$app->config->applicationDirectory . '/views/';
+        $this->viewsDirectory = App::$app->config->applicationDirectory . '/views/';
     }
 
     public function render($view, $useLayout = true)
     {
-        $viewPath = $this->_viewsDirectory . $view . '.php';
+        $viewPath = $this->viewsDirectory . $view . '.php';
         if (!file_exists($viewPath)) {
             throw new \Exception('View ' . $view . ' does not exist.');
         }
@@ -23,7 +23,7 @@ class View
         if ($useLayout) {
             $this->_renderWithLayout($view);
         } else {
-            require($this->_viewsDirectory . $view . '.php');
+            require($this->viewsDirectory . $view . '.php');
         }
         ob_end_flush();
     }
@@ -31,9 +31,9 @@ class View
     private function _renderWithLayout($view)
     {
         // primitive layout as header and footer files
-        require($this->_viewsDirectory . 'header.php');
-        require($this->_viewsDirectory . $view . '.php');
-        require($this->_viewsDirectory . 'footer.php');
+        require($this->viewsDirectory . 'header.php');
+        require($this->viewsDirectory . $view . '.php');
+        require($this->viewsDirectory . 'footer.php');
     }
 
     public function __get($name)

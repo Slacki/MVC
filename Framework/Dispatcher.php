@@ -50,10 +50,4 @@ class Dispatcher
         call_user_func([$controller, $actionName]);
         call_user_func([$controller, 'afterAction']);
     }
-
-    private function _executeActionWithParameters($controller)
-    {
-        $reflection = new \ReflectionClass($controller);
-
-    }
 }

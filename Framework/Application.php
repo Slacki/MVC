@@ -69,6 +69,7 @@ class Application
         $request = $router->resolve($request);
         $this->_request = $request;
         $dispatcher = new Dispatcher($request);
+        $dispatcher->dispatch();
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 namespace Framework;
+
 use Framework\Exception\ErrorException;
 
 /**

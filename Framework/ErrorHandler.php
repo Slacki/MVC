@@ -2,8 +2,6 @@
 
 namespace Framework;
 
-use Framework\Exception\ErrorException;
-
 /**
  * Class ErrorHandler handles uncaught PHP errors and exceptions
  *
@@ -17,6 +15,11 @@ class ErrorHandler
     public $discardExistingOutput = true;
 
     /**
+     * @var \Exception beeing currently handled.
+     */
+    public $exception;
+
+    /**
      * This method is responsible for registering all handlers.
      */
     public function register()
@@ -28,18 +31,53 @@ class ErrorHandler
     }
 
     /**
+     * Unregisters this error handler by resoring the PHP error and exception handlers.
+     */
+    public function unregister()
+    {
+        restore_error_handler();
+        restore_exception_handler();
+    }
+
+    /**
      * Handles uncaught PHP exceptions
      *
      * @param $exception \Exception
      */
     public function handleException($exception)
     {
-        restore_error_handler();
-        restore_exception_handler();
-        if ($this->discardExistingOutput) {
-            $this->clearOutput();
+        $this->exception = $exception;
+        // disable error capturing to avoid revursive errors
+        // while handling exceptions
+        $this->unregister();
+
+        // preventive HTTP status code
+        if (PHP_SAPI !== 'cli') {
+            http_response_code(500);
         }
-        $this->renderException($exception);
+
+        try {
+            if ($this->discardExistingOutput) {
+                $this->clearOutput();
+            }
+            $this->renderException($exception);
+        } catch (\Exception $e) {
+            // if error occurs while handling an exception
+            $msg = "An Error occurred while handling another error:\n";
+            $msg .= (string) $e;
+            $msg .= "\nPrevious exception:\n";
+            $msg .= (string) $exception;
+            if (PHP_SAPI === 'cli') {
+                echo $msg . "\n";
+            } else {
+                echo '<pre>' . htmlspecialchars($msg, ENT_QUOTES, Yii::$app->charset) . '</pre>';
+            }
+            $msg .= "\n\$_SERVER = " . VarDumper::export($_SERVER);
+            error_log($msg);
+            exit(1);
+        }
+
+        $this->exception = null;
     }
     /**
      * Handles PHP runtime errors.
@@ -53,6 +91,11 @@ class ErrorHandler
     public function handleError($code, $message, $file, $line)
     {
         if (error_reporting() & $code) {
+            // manually load ErrorException
+            if (!class_exists('Framework\\ErrorException', false)) {
+                require_once(__DIR__ . '/ErrorException.php');
+            }
+
             throw new ErrorException($message, $code, $code, $file, $line);
         }
     }
@@ -61,6 +104,11 @@ class ErrorHandler
      */
     public function handleFatalError()
     {
+        // manually load ErrorException
+        if (!class_exists('Framework\\ErrorException', false)) {
+            require_once(__DIR__ . '/ErrorException.php');
+        }
+
         $error = error_get_last();
         if (ErrorException::isFatalError($error)) {
             $exception = new ErrorException(
@@ -70,10 +118,13 @@ class ErrorHandler
                 $error['file'],
                 $error['line']
             );
+            $this->exception = $exception;
+
             if ($this->discardExistingOutput) {
                 $this->clearOutput();
             }
             $this->renderException($exception);
+
             exit(1);
         }
     }

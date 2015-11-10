@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Exception;
+namespace Framework;
 
 /**
  * Class ErrorException
@@ -27,8 +27,8 @@ class ErrorException extends \ErrorException
      * @param array $error Error get from error_get_last()
      * @return bool
      */
-    public static function isFatalError(array $error)
+    public static function isFatalError($error)
     {
-        return in_array($error['name'], self::$fatalErrors);
+        return isset($error['type']) && in_array($error['type'], self::$fatalErrors);
     }
 }

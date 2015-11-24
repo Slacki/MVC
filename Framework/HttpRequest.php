@@ -40,6 +40,8 @@ class HttpRequest
      */
     public $parameters = [];
 
+    public $baseUrl = null;
+
     /**
      * HttpRequest constructor.
      */
@@ -47,5 +49,16 @@ class HttpRequest
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->query = isset($_GET['q']) ? $_GET['q'] : App::$app->config->defaultAction;
+        $this->_resolveBaseUrl();
+    }
+
+    private function _resolveBaseUrl()
+    {
+        isset($_SERVER['HTTP_HOST']) ? $this->baseUrl = $_SERVER['HTTP_HOST'] : $this->baseUrl = null;
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $this->baseUrl = 'https://' . $this->baseUrl;
+        } else {
+            $this->baseUrl = 'http://' . $this->baseUrl;
+        }
     }
 }

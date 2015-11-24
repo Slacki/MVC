@@ -57,18 +57,13 @@ class Application
      */
     public function init()
     {
-        isset($_SERVER['HTTP_HOST']) ? $this->baseUrl = $_SERVER['HTTP_HOST'] : $this->baseUrl = null;
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-            $this->baseUrl = 'https://' . $this->baseUrl;
-        } else {
-            $this->baseUrl = 'http://' . $this->baseUrl;
-        }
-
-        $request = new HttpRequest();
         $router = new Router($this->config->router);
-        $request = $router->resolve($request);
-        $this->_request = $request;
-        $dispatcher = new Dispatcher($request);
+        $request = new HttpRequest();
+
+        $this->_request = $router->resolve($request);
+        $this->baseUrl = $this->_request->baseUrl;
+
+        $dispatcher = new Dispatcher($this->_request);
         $dispatcher->dispatch();
     }
 
@@ -76,17 +71,22 @@ class Application
      * Opens connection with Database and returns Database access object
      *
      * @return null|PDO
+     * @throws \Framework\ErrorException|\PDOException $e when connection with Database fails
      */
     public function getDb()
     {
         if ($this->_db === null) {
-            $this->_db = new PDO(
-                $this->config->database['dns'],
-                $this->config->database['username'],
-                $this->config->database['password'],
-                $this->config->database['options']
-            );
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            try {
+                $this->_db = new PDO(
+                    $this->config->database['dns'],
+                    $this->config->database['username'],
+                    $this->config->database['password'],
+                    $this->config->database['options']
+                );
+                $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (\PDOException $e) {
+                throw new ErrorException('Connection with database failed');
+            }
         }
         return $this->_db;
     }

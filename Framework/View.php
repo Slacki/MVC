@@ -52,7 +52,7 @@ class View
     }
 
     /**
-     * Renders the page without layout
+     * Renders the page with layout
      *
      * @param string $view Path to view file
      */

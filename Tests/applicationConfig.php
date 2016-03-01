@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'applicationDirectory' => dirname(__FILE__) . '/App',
+    'applicationDirectory' => dirname(__FILE__) . '/TestApp',
     'defaultAction' => 'site/index',
     'database' => [
         'dns' => 'mysql:host=localhost;dbname=yep;charset=UTF8',

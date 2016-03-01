@@ -5,7 +5,7 @@ namespace Tests;
 use Framework\App;
 use Framework\Exception\HttpException;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecuteAction()
     {
